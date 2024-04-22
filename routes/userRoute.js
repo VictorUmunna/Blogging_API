@@ -1,20 +1,9 @@
-const express = require('express')
+const express = require("express");
+const userController = require("../controllers/userController");
 
-const userRouter = express.Router();
+const userRoute = express.Router();
 
-userRouter.post('/signup', () => {
-  // Function for signing a new user in goes here
-  res.send('New user signed up successfully')
-});
+userRoute.put("/:id", userController.updateUser);
+userRoute.get("/:id", userController.getUser);
 
-userRouter.post('/login', () => {
-  // Function for logging a user in goes here
-  res.send('User logged in successfully')
-});
-
-userRouter.post('/logout', () => {
-  // Function for logging out a user goes here
-  res.send('User logged out successfully')
-});
-
-module.exports = userRouter;
+module.exports = userRoute;

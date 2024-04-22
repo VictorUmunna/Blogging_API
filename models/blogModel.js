@@ -2,49 +2,43 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const BlogSchema = new Schema({
+const BlogSchema = new Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     title: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
     },
     description: {
-        type: String,
-        required: true
+      type: String,
     },
     author: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     state: {
-        type: String,
-        enum: ['draft', 'published'],
-        default: 'draft'
+      type: String,
+      default: "draft",
+      enum: ["draft", "published"],
     },
     read_count: {
-        type: Number,
-        default: 0
+      type: Number,
+      default: 0,
     },
     reading_time: {
-        type: Number,
-        required: true
+      type: String,
     },
-    tags: {
-        type: [String],
-        default: []
-    },
+    tags: [String],
+
     body: {
-        type: String,
-        required: true
+      type: String,
     },
-    timestamp: {
-        type: Date,
-        default: Date.now
+  },
+  { timestamps: true }
+);
 
-    }
-})
-
-
-const BlogModel = mongoose.model("blogs", BlogSchema);
+BlogModel = mongoose.model("blogs", BlogSchema);
 
 module.exports = BlogModel;

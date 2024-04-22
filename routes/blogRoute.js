@@ -1,34 +1,13 @@
-const express = require('express')
-const blogRouter = express.Router();
+const express = require("express");
+const blogController = require("../controllers/blogController");
+const { verifyToken } = require("../middlewares/validations/validateUser");
 
-blogRouter.get('/', () => {
-  // Function for getting all available blogs
-  res.send('Gets all available articles')
-});
+const blogRoute = express.Router();
 
-blogRouter.get('/user', () => {
-  // Function for getting all the articles by a user
-  res.send('Gets all articles by a user')
-});
+blogRoute.post("/create", verifyToken, blogController.create);
+blogRoute.delete("/:id", verifyToken, blogController.delete);
+blogRoute.get("/:blogId", blogController.get);
+blogRoute.get("/", blogController.getBlogs);
+blogRoute.patch("/:id", verifyToken, blogController.update);
 
-blogRouter.get('/:id', () => {
-  // Function for getting an article by id
-  res.send('Gets an article by id')
-});
-
-blogRouter.post('/', () => {
-  // Function for creating a new article
-  res.send('Creates a new article')
-});
-
-blogRouter.delete('/:id', () => {
-  // Function for updating an article
-  res.send('Updates an article')
-});
-
-blogRouter.patch('/:id', () => {
-  // Function for deleting an article
-  res.send('Deletes an article')
-});
-
-module.exports = blogRouter;
+module.exports = blogRoute;

@@ -1,30 +1,33 @@
-// Require the necessary modules
-const express = require('express');
+const express = require("express");
+const passport = require("passport");
+const authRoute = require("./routes/authRoute");
+const bodyParser = require("body-parser");
+const userRoute = require("./routes/userRoute");
+const blogRoute = require("./routes/blogRoute");
 
-// Set the port for the server
-const PORT = 4000;
+require("./db").connectToMongoDB(); // Connect to MongoDB
+require("dotenv").config();
+require("./controllers/authenticationController");
 
-// Create an instance of express
+const PORT = process.env.PORT;
+
 const app = express();
 
-// Use the express.json() middleware
 app.use(express.json());
 
-// Require the routers
-const userRouter = require('./routes/userRoute')
-const blogRouter = require('./routes/blogRoute')
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// Use the routers
-app.use('/user', userRouter)
-app.use('/blog', blogRouter)
+app.get("/", (req, res) => {
+  return res.json({ status: true });
+});
 
-// Add a homepage endpoint
-app.get('/', (req, res) => {
-    res.send("Welcome to my Blogging App")
-})
+app.use("/auth", authRoute);
 
-// Listen for requests made to the server
-app.listen(PORT, (req, res) => {
-    console.log(`Server is running on http://localhost:${PORT}`)
-})
- 
+app.use("/user", passport.authenticate("jwt", { session: false }), userRoute);
+app.use("/blog", blogRoute);
+
+app.listen(PORT, () => {
+  console.log(`Server started on PORT: http://localhost:${PORT}`);
+});
+
+module.exports = app;
