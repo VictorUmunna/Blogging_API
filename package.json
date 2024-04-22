@@ -1,28 +1,29 @@
 {
-  "name": "routing_express",
+  "name": "blog_api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env jest --testEnvironment=node --verbose --forceExit --watchAll --maxWorkers=1 --detectOpenHandles",
+    "start:dev": "nodemon index.js",
+    "start:prod": "NODE_ENV = production nodemon index.js"
   },
   "keywords": [],
-  "author": "Victor Umunna",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.0.1",
-    "body-parser": "^1.19.2",
-    "connect-ensure-login": "^0.1.1",
-    "dotenv": "^16.0.0",
-    "ejs": "^3.1.6",
-    "express": "^4.17.3",
-    "express-session": "^1.17.2",
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.1",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jest": "^25.2.0",
+    "joi": "^17.7.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.2.8",
-    "nodemon": "^2.0.15",
-    "passport": "^0.5.2",
+    "mongoose": "^6.7.0",
+    "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^7.0.0"
+    "supertest": "^6.3.1"
   }
 }
