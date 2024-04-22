@@ -1,49 +1,54 @@
 const mongoose = require("mongoose");
+const schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
-
-const UserSchema = new mongoose.Schema(
-  {
-    blogs: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Blog",
-      },
-    ],
-    first_name: {
-      type: String,
-    },
-    last_name: {
-      type: String,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
+// 1. Users should have a first_name, last_name, email, password, (you can add other
+//     attributes you want to store about the user)
+const userSchema = new schema({
+  email: {
+    type: String,
+    required: [true, "Email is required"],
+    unique: true,
   },
-  { timestamps: true }
-);
+  password: {
+    type: String,
+    required: [true, "Password is required"],
+  },
 
-UserSchema.pre("save", async function (next) {
+  first_name: {
+    type: String,
+    required: [true, "first name is required"],
+  },
+  last_name: {
+    type: String,
+    required: [true, "last name is required"],
+  },
+  article: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "articles",
+    },
+  ],
+});
+
+userSchema.pre("save", async function (next) {
   const user = this;
-  const hash = await bcrypt.hash(this.password, 10);
-
-  this.password = hash;
+  const hash = await bcrypt.hash(user.password, 10);
+  user.password = hash;
   next();
 });
 
-// You will also need to make sure that the user trying to log in has the correct credentials. Add the following new method:
-UserSchema.methods.isValidPassword = async function (password) {
+userSchema.methods.isValidPassword = async function (password) {
   const user = this;
   const compare = await bcrypt.compare(password, user.password);
-
   return compare;
 };
 
-const UserModel = mongoose.model('users', UserSchema);
+userSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    //   returnedObject.id = returnedObject._id.toString()
+    //   delete returnedObject._id
+    delete returnedObject.__v;
+  },
+});
 
-  module.exports = UserModel
+module.exports = mongoose.model("user", userSchema);
