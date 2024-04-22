@@ -2,8 +2,8 @@ const express = require("express");
 const passport = require("passport");
 const authRoute = require("./routes/authRoute");
 const bodyParser = require("body-parser");
-const userRoute = require("./routes/userRoute");
-const blogRoute = require("./routes/blogRoute");
+const userRoute = require("./routes/publicRoute");
+const blogRoute = require("./routes/articleRoute");
 
 require("./db").connectToMongoDB(); // Connect to MongoDB
 require("dotenv").config();
